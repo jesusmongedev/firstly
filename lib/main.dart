@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         title: 'Random Word App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
         home: MyHomePage(),
         debugShowCheckedModeBanner: false,
@@ -200,29 +200,25 @@ class FavoritesPage extends StatelessWidget {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: ListView(
-        children: [
-          Text(
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text(
             'You have $favoritesLength favorites:',
             style: style,
           ),
-          SizedBox(height: 10),
-          for (WordPair favorite in favorites)
-            Row(
-              children: [
-                Icon(
-                  Icons.favorite,
-                  color: theme.colorScheme.secondary,
-                ),
-                SizedBox(width: 20),
-                Text('$favorite', style: theme.textTheme.bodyMedium),
-                SizedBox(height: 40),
-              ],
+        ),
+        for (var pair in favorites)
+          ListTile(
+            dense: true,
+            leading: Icon(
+              Icons.favorite,
+              color: theme.colorScheme.secondary,
             ),
-        ],
-      ),
+            title: Text('$pair', style: theme.textTheme.bodyMedium),
+          ),
+      ],
     );
   }
 }
