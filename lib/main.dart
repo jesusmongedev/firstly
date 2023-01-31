@@ -61,11 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _reset() {
-    setState(() {
-      _counter = 0;
-    });
-  }
+  // void _reset() {
+  //   setState(() {
+  //     _counter = 0;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _reset,
+        onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
