@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         title: 'Random Word App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
         home: MyHomePage(),
         debugShowCheckedModeBanner: false,
@@ -41,7 +41,11 @@ class MyAppState extends ChangeNotifier {
         ? favorites.remove(current)
         : favorites.add(current);
     notifyListeners();
-    print('$favorites');
+  }
+
+  void toggleRemoveFavorite(WordPair pair) {
+    favorites.contains(pair) ? favorites.remove(pair) : favorites.add(pair);
+    notifyListeners();
   }
 }
 
@@ -193,6 +197,10 @@ class FavoritesPage extends StatelessWidget {
             Icon(
               Icons.info,
               color: theme.colorScheme.secondary,
+              size: 40,
+            ),
+            SizedBox(
+              height: 10,
             ),
             Text('No favorites yet.'),
           ],
@@ -200,24 +208,37 @@ class FavoritesPage extends StatelessWidget {
       );
     }
 
-    return ListView(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(left: 30, top: 30),
           child: Text(
             'You have $favoritesLength favorites:',
             style: style,
           ),
         ),
-        for (var pair in favorites)
-          ListTile(
-            dense: true,
-            leading: Icon(
-              Icons.favorite,
-              color: theme.colorScheme.secondary,
-            ),
-            title: Text('$pair', style: theme.textTheme.bodyMedium),
+        Expanded(
+          child: GridView(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 400, childAspectRatio: 400 / 80),
+            children: [
+              for (var pair in favorites)
+                ListTile(
+                  leading: IconButton(
+                    onPressed: () {
+                      appState.toggleRemoveFavorite(pair);
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                  title: Text('$pair', style: theme.textTheme.bodyMedium),
+                ),
+            ],
           ),
+        ),
       ],
     );
   }
