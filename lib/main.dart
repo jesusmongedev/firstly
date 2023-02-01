@@ -58,12 +58,12 @@ class MyAppState extends ChangeNotifier {
   }
 
   // reset app
-  void reset() {
-    history.clear();
-    favorites.clear();
-    current = WordPair.random();
-    notifyListeners();
-  }
+  void reset() => {
+        history.clear(),
+        favorites.clear(),
+        current = WordPair.random(),
+        notifyListeners(),
+      };
 }
 
 class MyHomePage extends StatefulWidget {
@@ -171,6 +171,7 @@ class GeneratorPage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
     var favorites = appState.favorites;
+    var history = appState.history;
     IconData icon;
     favorites.contains(pair)
         ? icon = Icons.favorite
@@ -191,9 +192,7 @@ class GeneratorPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
-                  onPressed: () {
-                    appState.reset();
-                  },
+                  onPressed: history.isNotEmpty ? () => appState.reset() : null,
                   child: Text('Reset')),
               SizedBox(width: 10),
               ElevatedButton.icon(
@@ -234,6 +233,7 @@ class BigCard extends StatelessWidget {
 
     return Card(
       color: theme.colorScheme.primary,
+      elevation: 8,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: AnimatedSize(
@@ -277,7 +277,7 @@ class FavoritesPage extends StatelessWidget {
           children: [
             Icon(
               Icons.info,
-              color: theme.colorScheme.secondary,
+              color: theme.colorScheme.primary,
               size: 40,
             ),
             SizedBox(
@@ -293,7 +293,7 @@ class FavoritesPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 30, top: 60),
+          padding: const EdgeInsets.only(left: 30, top: 60, bottom: 10),
           child: Text(
             'You have $favoritesLength favorites:',
             style: style,
@@ -352,7 +352,10 @@ class _HistoryListViewState extends State<HistoryListView> {
     final appState = context.watch<MyAppState>();
     appState.historyListKey = _key;
 
-    return ShaderMask(
+    if (appState.history.isEmpty) {
+      return SizedBox.shrink();
+    } else {
+      return ShaderMask(
       shaderCallback: (bounds) => _maskingGradient.createShader(bounds),
       // This blend mode takes the opacity of the shader (i.e. our gradient)
       // and applies it to the destination (i.e. our animated list).
@@ -364,6 +367,7 @@ class _HistoryListViewState extends State<HistoryListView> {
         initialItemCount: appState.history.length,
         itemBuilder: (context, index, animation) {
           final pair = appState.history[index];
+
           return SizeTransition(
             sizeFactor: animation,
             child: Center(
@@ -384,5 +388,6 @@ class _HistoryListViewState extends State<HistoryListView> {
         },
       ),
     );
+    }
   }
 }
