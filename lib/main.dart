@@ -191,22 +191,30 @@ class GeneratorPage extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ElevatedButton(
-                  onPressed: history.isNotEmpty ? () => appState.reset() : null,
-                  child: Text('Reset')),
+              Tooltip(
+                message: 'Reset app',
+                child: IconButton(
+                    onPressed: history.isNotEmpty ? () => appState.reset() : null,
+                    icon: Icon(Icons.restart_alt),),
+              ),
               SizedBox(width: 10),
-              ElevatedButton.icon(
-                  onPressed: () {
-                    appState.toggleFavorite();
-                  },
-                  icon: Icon(icon),
-                  label: Text('Like')),
+              Tooltip(
+                message: 'Like',
+                child: IconButton(
+                    onPressed: () {
+                      appState.toggleFavorite();
+                    },
+                    icon: Icon(icon),),
+              ),
               SizedBox(width: 10),
-              ElevatedButton(
-                  onPressed: () {
-                    appState.getNext();
-                  },
-                  child: Text("Next")),
+              Tooltip(
+                message: 'Next',
+                child: IconButton(
+                    onPressed: () {
+                      appState.getNext();
+                    },
+                    icon: Icon(Icons.navigate_next),),
+              ),
             ],
           ),
           Spacer(flex: 2),
